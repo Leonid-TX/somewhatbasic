@@ -1,0 +1,26 @@
+# Compiler and tools setup for cross-compiling to Windows 64-bit
+CXX = x86_64-w64-mingw32-g++
+CXXFLAGS = -std=c++17 -O2 -Wall -Wextra
+# -s strips debug symbols and debugging data to minimize file size
+LDFLAGS = -s -static -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
+
+# Executable name with .exe extension for Windows
+TARGET = sbasic.exe
+OBJS = sbasic.o linalg.o liboffice.o
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CXX) $(OBJS) -o $(TARGET) $(LDFLAGS)
+
+sbasic.o: sbasic.cpp
+	$(CXX) $(CXXFLAGS) -c sbasic.cpp -o sbasic.o
+
+linalg.o: linalg.cpp
+	$(CXX) $(CXXFLAGS) -c linalg.cpp -o linalg.o
+
+liboffice.o: liboffice.cpp
+	$(CXX) $(CXXFLAGS) -c liboffice.cpp -o liboffice.o
+
+clean:
+	rm -f $(OBJS) $(TARGET)
